@@ -1,0 +1,62 @@
+/**
+ * Add-Ons product-data repeater.
+ *
+ * Adds/removes add-on definition rows in the WooCommerce product editor. Each
+ * new row is cloned from the inline <script> template with a fresh index so the
+ * posted field names stay unique.
+ */
+(function () {
+	'use strict';
+
+	function ready(fn) {
+		if (document.readyState !== 'loading') {
+			fn();
+		} else {
+			document.addEventListener('DOMContentLoaded', fn);
+		}
+	}
+
+	ready(function () {
+		var panel = document.getElementById('addons_product_data');
+
+		if (!panel) {
+			return;
+		}
+
+		var rows = panel.querySelector('[data-addons-rows]');
+		var addBtn = panel.querySelector('[data-addons-add]');
+		var template = document.getElementById('addons-row-template');
+
+		if (!rows || !addBtn || !template) {
+			return;
+		}
+
+		var nextIndex = rows.querySelectorAll('[data-addons-row]').length;
+
+		addBtn.addEventListener('click', function () {
+			var html = template.innerHTML.replace(/__INDEX__/g, String(nextIndex));
+			nextIndex += 1;
+
+			var wrap = document.createElement('div');
+			wrap.innerHTML = html.trim();
+
+			var node = wrap.firstChild;
+
+			if (node) {
+				rows.appendChild(node);
+			}
+		});
+
+		rows.addEventListener('click', function (event) {
+			var target = event.target;
+
+			if (target && target.hasAttribute('data-addons-remove')) {
+				var row = target.closest('[data-addons-row]');
+
+				if (row) {
+					row.parentNode.removeChild(row);
+				}
+			}
+		});
+	});
+})();

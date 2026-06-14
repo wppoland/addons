@@ -1,0 +1,54 @@
+=== Add-Ons – Product Options for WooCommerce ===
+Contributors: wppoland
+Tags: woocommerce, product options, add-ons, extra fields, product addons
+Requires at least: 6.5
+Tested up to: 7.0
+Requires PHP: 8.1
+Requires Plugins: woocommerce
+Stable tag: 0.1.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+Let customers add paid or free options (text, checkbox, select) to products before adding to cart.
+
+== Description ==
+
+Add-Ons lets store owners offer extra product options that customers choose before adding a product to the cart — gift wrapping, engraving text, an extended warranty, a colour choice and more.
+
+For each product you define a list of add-ons in the WooCommerce product editor. Every add-on has a label, a field type, an optional required flag, and an optional price.
+
+* **Field types** — plain text, a checkbox, or a select drop-down.
+* **Price deltas** — give an add-on (or each select option) a price; the amount is added to the cart line total automatically.
+* **Free or paid** — leave the price at zero for free options such as a personalised message.
+* **Cart & order display** — the customer's choices appear in the cart, at checkout, and on the order.
+
+Add-on definitions are stored as standard product meta — no custom database tables. The feature is powered by the WPPoland storefront-kit engine, so the plugin itself stays small and fast.
+
+== Installation ==
+
+1. Upload the plugin to `/wp-content/plugins/addons`, or install via Plugins → Add New.
+2. Activate it. WooCommerce must be active.
+3. Edit a product, open the **Add-Ons** tab in the Product data panel, and add your options.
+
+== Frequently Asked Questions ==
+
+= Does it require WooCommerce? =
+
+Yes. WooCommerce must be installed and active.
+
+= Where do customers see the options? =
+
+On the single product page, just above the Add to cart button. Their selections then show in the cart, at checkout, and on the order.
+
+= Does it create custom database tables? =
+
+No. Add-on definitions are stored as product meta.
+
+== Screenshots ==
+
+1. Add-Ons – Product Options for WooCommerce in action.
+
+== Changelog ==
+
+= 0.1.0 =
+* Initial release.

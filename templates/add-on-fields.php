@@ -1,0 +1,102 @@
+<?php
+/**
+ * Front-end add-on fields, rendered by the storefront-kit ProductAddOnsEngine on
+ * `woocommerce_before_add_to_cart_button`.
+ *
+ * @var \WC_Product                                                                              $product
+ * @var list<array{label: string, type: string, required: bool, price: float, options: array<string, float>}> $add_ons
+ * @var string                                                                                   $field_prefix
+ * @var array<string, mixed>                                                                     $settings
+ * @var string                                                                                   $group_title
+ *
+ * @package Addons/Templates
+ */
+
+declare(strict_types=1);
+
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template-scope variables supplied by the engine.
+
+defined('ABSPATH') || exit;
+
+if (! isset($add_ons) || ! is_array($add_ons) || $add_ons === []) {
+    return;
+}
+
+$addons_group_title = isset($group_title) ? (string) $group_title : '';
+$addons_prefix      = isset($field_prefix) ? (string) $field_prefix : 'addons_field_';
+?>
+<div class="addons-fields">
+    <?php if ($addons_group_title !== '') : ?>
+        <p class="addons-fields__title"><?php echo esc_html($addons_group_title); ?></p>
+    <?php endif; ?>
+
+    <?php foreach ($add_ons as $addons_index => $addons_field) : ?>
+        <?php
+        $addons_name     = $addons_prefix . (int) $addons_index;
+        $addons_id       = sanitize_html_class($addons_name);
+        $addons_label    = (string) ($addons_field['label'] ?? '');
+        $addons_type     = (string) ($addons_field['type'] ?? 'text');
+        $addons_required = (bool) ($addons_field['required'] ?? false);
+        $addons_price    = (float) ($addons_field['price'] ?? 0);
+        $addons_options  = isset($addons_field['options']) && is_array($addons_field['options'])
+            ? $addons_field['options']
+            : array();
+        ?>
+        <p class="addons-field addons-field--<?php echo esc_attr($addons_type); ?>">
+            <?php if ($addons_type === 'checkbox') : ?>
+                <label for="<?php echo esc_attr($addons_id); ?>">
+                    <input
+                        type="checkbox"
+                        id="<?php echo esc_attr($addons_id); ?>"
+                        name="<?php echo esc_attr($addons_name); ?>"
+                        value="<?php echo esc_attr($addons_label); ?>"
+                        <?php echo $addons_required ? 'required' : ''; ?>
+                    />
+                    <?php echo esc_html($addons_label); ?>
+                    <?php if ($addons_price > 0) : ?>
+                        <span class="addons-field__price">(<?php echo wp_kses_post(wc_price($addons_price)); ?>)</span>
+                    <?php endif; ?>
+                </label>
+            <?php elseif ($addons_type === 'select') : ?>
+                <label for="<?php echo esc_attr($addons_id); ?>">
+                    <?php echo esc_html($addons_label); ?>
+                    <?php if ($addons_required) : ?><abbr class="required" title="<?php esc_attr_e('required', 'addons'); ?>">*</abbr><?php endif; ?>
+                </label>
+                <select
+                    id="<?php echo esc_attr($addons_id); ?>"
+                    name="<?php echo esc_attr($addons_name); ?>"
+                    <?php echo $addons_required ? 'required' : ''; ?>
+                >
+                    <option value=""><?php esc_html_e('— Select —', 'addons'); ?></option>
+                    <?php foreach ($addons_options as $addons_opt_label => $addons_opt_price) : ?>
+                        <?php
+                        $addons_opt_label = (string) $addons_opt_label;
+                        $addons_opt_price = (float) $addons_opt_price;
+                        $addons_opt_text  = $addons_opt_price > 0
+                            ? $addons_opt_label . ' (' . wp_strip_all_tags(wc_price($addons_opt_price)) . ')'
+                            : $addons_opt_label;
+                        ?>
+                        <option value="<?php echo esc_attr($addons_opt_label); ?>"><?php echo esc_html($addons_opt_text); ?></option>
+                    <?php endforeach; ?>
+                </select>
+            <?php else : ?>
+                <label for="<?php echo esc_attr($addons_id); ?>">
+                    <?php echo esc_html($addons_label); ?>
+                    <?php if ($addons_required) : ?><abbr class="required" title="<?php esc_attr_e('required', 'addons'); ?>">*</abbr><?php endif; ?>
+                    <?php if ($addons_price > 0) : ?>
+                        <span class="addons-field__price">(<?php echo wp_kses_post(wc_price($addons_price)); ?>)</span>
+                    <?php endif; ?>
+                </label>
+                <input
+                    type="text"
+                    id="<?php echo esc_attr($addons_id); ?>"
+                    name="<?php echo esc_attr($addons_name); ?>"
+                    class="input-text"
+                    <?php echo $addons_required ? 'required' : ''; ?>
+                />
+            <?php endif; ?>
+        </p>
+    <?php endforeach; ?>
+</div>
+<?php
+// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
