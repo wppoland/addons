@@ -11,18 +11,28 @@ declare(strict_types=1);
 
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template-scope variables supplied by ProductData.
 
+use Addons\Admin\InlineHelp;
+
 defined('ABSPATH') || exit;
 
 $addons_rows = isset($add_ons) && is_array($add_ons) ? $add_ons : array();
 ?>
-<div id="addons_product_data" class="panel woocommerce_options_panel">
+<div id="addons_product_data" class="panel woocommerce_options_panel addons-admin">
     <div class="options_group">
         <p class="form-field">
-            <label><?php esc_html_e('Product add-ons', 'addons'); ?></label>
+            <label><?php esc_html_e('Product add-ons', 'addons'); ?>
+                <?php InlineHelp::output('panel-intro', __('Each row below becomes one field a customer sees on this product page. Use Text for free-form input (like an engraving message), Checkbox for a yes/no extra, or Select for a list of choices. Any price you enter is added to the line total when the option is chosen.', 'addons')); ?>
+            </label>
             <span class="description">
                 <?php esc_html_e('Define options customers can choose before adding this product to the cart. A positive price is added to the line total.', 'addons'); ?>
             </span>
         </p>
+
+        <div class="addons-empty" data-addons-empty<?php echo $addons_rows === array() ? '' : ' hidden'; ?>>
+            <div class="addons-empty__icon" aria-hidden="true">&#10133;</div>
+            <p><strong><?php esc_html_e('No add-ons yet', 'addons'); ?></strong></p>
+            <p><?php esc_html_e('Add your first option to let customers personalise this product or pay for extras such as gift wrapping, engraving, or express handling.', 'addons'); ?></p>
+        </div>
 
         <div class="addons-admin-rows" data-addons-rows>
             <?php foreach ($addons_rows as $addons_i => $addons_row) : ?>
@@ -43,13 +53,14 @@ $addons_rows = isset($add_ons) && is_array($add_ons) ? $add_ons : array();
                 ?>
                 <div class="addons-admin-row" data-addons-row>
                     <p class="form-field">
-                        <input type="text" name="addons_def[<?php echo esc_attr((string) $addons_i); ?>][label]" placeholder="<?php esc_attr_e('Label', 'addons'); ?>" value="<?php echo esc_attr($addons_label); ?>" />
-                        <select name="addons_def[<?php echo esc_attr((string) $addons_i); ?>][type]">
+                        <span class="addons-row-badge" aria-hidden="true"><?php esc_html_e('Option', 'addons'); ?></span>
+                        <input type="text" name="addons_def[<?php echo esc_attr((string) $addons_i); ?>][label]" placeholder="<?php esc_attr_e('Label (e.g. Gift wrap)', 'addons'); ?>" value="<?php echo esc_attr($addons_label); ?>" aria-label="<?php esc_attr_e('Option label', 'addons'); ?>" />
+                        <select name="addons_def[<?php echo esc_attr((string) $addons_i); ?>][type]" aria-label="<?php esc_attr_e('Option type', 'addons'); ?>">
                             <option value="text" <?php selected($addons_type, 'text'); ?>><?php esc_html_e('Text', 'addons'); ?></option>
                             <option value="checkbox" <?php selected($addons_type, 'checkbox'); ?>><?php esc_html_e('Checkbox', 'addons'); ?></option>
                             <option value="select" <?php selected($addons_type, 'select'); ?>><?php esc_html_e('Select', 'addons'); ?></option>
                         </select>
-                        <input type="text" name="addons_def[<?php echo esc_attr((string) $addons_i); ?>][price]" placeholder="<?php esc_attr_e('Price', 'addons'); ?>" value="<?php echo esc_attr($addons_price); ?>" style="width:6em;" />
+                        <input type="text" inputmode="decimal" name="addons_def[<?php echo esc_attr((string) $addons_i); ?>][price]" placeholder="<?php esc_attr_e('Price', 'addons'); ?>" value="<?php echo esc_attr($addons_price); ?>" style="width:6em;" aria-label="<?php esc_attr_e('Extra price added when chosen', 'addons'); ?>" />
                         <label>
                             <input type="checkbox" name="addons_def[<?php echo esc_attr((string) $addons_i); ?>][required]" value="1" <?php checked($addons_required); ?> />
                             <?php esc_html_e('Required', 'addons'); ?>
@@ -57,7 +68,8 @@ $addons_rows = isset($add_ons) && is_array($add_ons) ? $add_ons : array();
                         <button type="button" class="button addons-admin-remove" data-addons-remove><?php esc_html_e('Remove', 'addons'); ?></button>
                     </p>
                     <p class="form-field">
-                        <textarea name="addons_def[<?php echo esc_attr((string) $addons_i); ?>][options]" rows="3" placeholder="<?php esc_attr_e('Select options, one per line: Label | price', 'addons'); ?>" style="width:100%;"><?php echo esc_textarea($addons_options); ?></textarea>
+                        <textarea name="addons_def[<?php echo esc_attr((string) $addons_i); ?>][options]" rows="3" placeholder="<?php esc_attr_e('Select options, one per line: Label | price', 'addons'); ?>" style="width:100%;" aria-label="<?php esc_attr_e('Choices for the Select type', 'addons'); ?>"><?php echo esc_textarea($addons_options); ?></textarea>
+                        <span class="addons-options-help description"><?php esc_html_e('Only used for the "Select" type. One choice per line as "Label | price" — e.g. "Standard | 0" and "Premium | 9.99". Omit the price for a free choice.', 'addons'); ?></span>
                     </p>
                     <?php
                     /**
@@ -76,19 +88,20 @@ $addons_rows = isset($add_ons) && is_array($add_ons) ? $add_ons : array();
         </div>
 
         <p class="form-field">
-            <button type="button" class="button addons-admin-add" data-addons-add><?php esc_html_e('Add option', 'addons'); ?></button>
+            <button type="button" class="button button-primary addons-admin-add" data-addons-add><?php esc_html_e('Add option', 'addons'); ?></button>
         </p>
 
         <script type="text/template" id="addons-row-template">
             <div class="addons-admin-row" data-addons-row>
                 <p class="form-field">
-                    <input type="text" name="addons_def[__INDEX__][label]" placeholder="<?php esc_attr_e('Label', 'addons'); ?>" value="" />
-                    <select name="addons_def[__INDEX__][type]">
+                    <span class="addons-row-badge" aria-hidden="true"><?php esc_html_e('Option', 'addons'); ?></span>
+                    <input type="text" name="addons_def[__INDEX__][label]" placeholder="<?php esc_attr_e('Label (e.g. Gift wrap)', 'addons'); ?>" value="" aria-label="<?php esc_attr_e('Option label', 'addons'); ?>" />
+                    <select name="addons_def[__INDEX__][type]" aria-label="<?php esc_attr_e('Option type', 'addons'); ?>">
                         <option value="text"><?php esc_html_e('Text', 'addons'); ?></option>
                         <option value="checkbox"><?php esc_html_e('Checkbox', 'addons'); ?></option>
                         <option value="select"><?php esc_html_e('Select', 'addons'); ?></option>
                     </select>
-                    <input type="text" name="addons_def[__INDEX__][price]" placeholder="<?php esc_attr_e('Price', 'addons'); ?>" value="" style="width:6em;" />
+                    <input type="text" inputmode="decimal" name="addons_def[__INDEX__][price]" placeholder="<?php esc_attr_e('Price', 'addons'); ?>" value="" style="width:6em;" aria-label="<?php esc_attr_e('Extra price added when chosen', 'addons'); ?>" />
                     <label>
                         <input type="checkbox" name="addons_def[__INDEX__][required]" value="1" />
                         <?php esc_html_e('Required', 'addons'); ?>
@@ -96,7 +109,8 @@ $addons_rows = isset($add_ons) && is_array($add_ons) ? $add_ons : array();
                     <button type="button" class="button addons-admin-remove" data-addons-remove><?php esc_html_e('Remove', 'addons'); ?></button>
                 </p>
                 <p class="form-field">
-                    <textarea name="addons_def[__INDEX__][options]" rows="3" placeholder="<?php esc_attr_e('Select options, one per line: Label | price', 'addons'); ?>" style="width:100%;"></textarea>
+                    <textarea name="addons_def[__INDEX__][options]" rows="3" placeholder="<?php esc_attr_e('Select options, one per line: Label | price', 'addons'); ?>" style="width:100%;" aria-label="<?php esc_attr_e('Choices for the Select type', 'addons'); ?>"></textarea>
+                    <span class="addons-options-help description"><?php esc_html_e('Only used for the "Select" type. One choice per line as "Label | price" — e.g. "Standard | 0" and "Premium | 9.99". Omit the price for a free choice.', 'addons'); ?></span>
                 </p>
                 <?php
                 /**

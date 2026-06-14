@@ -1,9 +1,10 @@
 /**
- * Add-Ons product-data repeater.
+ * Add-Ons product-data repeater (vanilla JS, no jQuery).
  *
- * Adds/removes add-on definition rows in the WooCommerce product editor. Each
- * new row is cloned from the inline <script> template with a fresh index so the
- * posted field names stay unique.
+ * Adds/removes add-on definition rows in the WooCommerce product editor. New
+ * rows are cloned from the inline <script> template with a fresh index so the
+ * posted field names stay unique. Uses event delegation, keeps an accessible
+ * empty state in sync, and moves focus to the first input of a new row.
  */
 (function () {
 	'use strict';
@@ -26,6 +27,7 @@
 		var rows = panel.querySelector('[data-addons-rows]');
 		var addBtn = panel.querySelector('[data-addons-add]');
 		var template = document.getElementById('addons-row-template');
+		var empty = panel.querySelector('[data-addons-empty]');
 
 		if (!rows || !addBtn || !template) {
 			return;
@@ -33,30 +35,56 @@
 
 		var nextIndex = rows.querySelectorAll('[data-addons-row]').length;
 
-		addBtn.addEventListener('click', function () {
+		function rowCount() {
+			return rows.querySelectorAll('[data-addons-row]').length;
+		}
+
+		function syncEmptyState() {
+			if (empty) {
+				empty.hidden = rowCount() > 0;
+			}
+		}
+
+		function addRow() {
 			var html = template.innerHTML.replace(/__INDEX__/g, String(nextIndex));
 			nextIndex += 1;
 
 			var wrap = document.createElement('div');
 			wrap.innerHTML = html.trim();
 
-			var node = wrap.firstChild;
+			var node = wrap.firstElementChild;
 
-			if (node) {
-				rows.appendChild(node);
+			if (!node) {
+				return;
 			}
-		});
+
+			rows.appendChild(node);
+			syncEmptyState();
+
+			var firstInput = node.querySelector('input, select, textarea');
+
+			if (firstInput) {
+				firstInput.focus();
+			}
+		}
+
+		addBtn.addEventListener('click', addRow);
 
 		rows.addEventListener('click', function (event) {
 			var target = event.target;
 
-			if (target && target.hasAttribute('data-addons-remove')) {
-				var row = target.closest('[data-addons-row]');
+			if (!target || !target.closest('[data-addons-remove]')) {
+				return;
+			}
 
-				if (row) {
-					row.parentNode.removeChild(row);
-				}
+			var row = target.closest('[data-addons-row]');
+
+			if (row && row.parentNode) {
+				row.parentNode.removeChild(row);
+				syncEmptyState();
 			}
 		});
+
+		syncEmptyState();
 	});
 })();

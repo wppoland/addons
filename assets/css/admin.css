@@ -1,0 +1,168 @@
+/**
+ * Admin styling for the Add-Ons settings page and the product-data repeater.
+ *
+ * Loaded only on this plugin's own admin screens. Themeable via custom
+ * properties, dark-mode aware (respects WP admin colour scheme), and
+ * motion-safe. Keeps WP-native look while adding clarity and polish.
+ */
+
+.addons-admin {
+	--addons-a-accent: #2271b1;
+	--addons-a-border: #dcdcde;
+	--addons-a-surface: #fff;
+	--addons-a-muted: #50575e;
+	--addons-a-radius: 8px;
+}
+
+/* ---- Inline help affordance (accessible "?" tooltip) ---- */
+
+.addons-help {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	inline-size: 1.25em;
+	block-size: 1.25em;
+	margin-inline-start: 0.4em;
+	border: 1px solid var(--addons-a-border);
+	border-radius: 50%;
+	background: transparent;
+	color: var(--addons-a-muted);
+	font-size: 0.78em;
+	font-weight: 700;
+	line-height: 1;
+	cursor: help;
+	vertical-align: middle;
+	padding: 0;
+}
+
+.addons-help:hover,
+.addons-help:focus-visible {
+	color: var(--addons-a-accent);
+	border-color: var(--addons-a-accent);
+}
+
+.addons-help:focus-visible {
+	outline: 2px solid var(--addons-a-accent);
+	outline-offset: 2px;
+}
+
+/* Native Popover API tooltip surface. */
+.addons-tip {
+	max-inline-size: 22rem;
+	margin: 0;
+	padding: 0.6rem 0.8rem;
+	border: 1px solid var(--addons-a-border);
+	border-radius: var(--addons-a-radius);
+	background: var(--addons-a-surface);
+	color: var(--addons-a-muted);
+	font-size: 0.82rem;
+	line-height: 1.5;
+	box-shadow: 0 6px 24px rgba(0, 0, 0, 0.14);
+}
+
+/* ---- Product-data repeater rows ---- */
+
+.addons-admin-rows {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.addons-admin-row {
+	border: 1px solid var(--addons-a-border);
+	border-radius: var(--addons-a-radius);
+	padding: 0.85rem 1rem;
+	background: color-mix(in srgb, var(--addons-a-accent) 3%, transparent);
+}
+
+.addons-admin-row .form-field {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem;
+	margin: 0 0 0.5rem;
+	padding: 0;
+}
+
+.addons-admin-row .form-field:last-child {
+	margin-bottom: 0;
+}
+
+.addons-admin-row input[type="text"] {
+	flex: 1 1 12rem;
+	min-inline-size: 8rem;
+}
+
+.addons-admin-row select {
+	flex: 0 0 auto;
+}
+
+.addons-admin-row label {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3rem;
+	white-space: nowrap;
+}
+
+.addons-admin-remove {
+	margin-inline-start: auto;
+}
+
+.addons-admin-row .addons-options-help {
+	flex: 1 1 100%;
+	margin: 0;
+	color: var(--addons-a-muted);
+	font-size: 0.82rem;
+}
+
+/* Drag handle (visual only — reorder by editing rows). */
+.addons-row-badge {
+	flex: 0 0 auto;
+	font-size: 0.72rem;
+	font-weight: 600;
+	color: var(--addons-a-muted);
+	background: color-mix(in srgb, var(--addons-a-accent) 12%, transparent);
+	border-radius: 999px;
+	padding: 0.15rem 0.55rem;
+}
+
+/* ---- Empty state ---- */
+
+.addons-empty {
+	border: 1px dashed var(--addons-a-border);
+	border-radius: var(--addons-a-radius);
+	padding: 1.25rem;
+	text-align: center;
+	color: var(--addons-a-muted);
+}
+
+.addons-empty[hidden] {
+	display: none;
+}
+
+.addons-empty__icon {
+	font-size: 1.6rem;
+	line-height: 1;
+	margin-block-end: 0.4rem;
+}
+
+/* ---- Settings page descriptions ---- */
+
+.addons-settings .form-table .description {
+	max-inline-size: 40rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.addons-help,
+	.addons-admin-row {
+		transition: border-color 150ms ease, color 150ms ease, background-color 150ms ease;
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	.addons-admin {
+		--addons-a-border: #3c434a;
+		--addons-a-surface: #1e1e1e;
+		--addons-a-muted: #a7aaad;
+	}
+}

@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Add-Ons – Product Options for WooCommerce 0.1.0\n"
+"Project-Id-Version: addons 0.2.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/addons\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-06-14T08:21:19+00:00\n"
+"POT-Creation-Date: 2026-06-14T10:34:13+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: addons\n"
@@ -43,89 +43,192 @@ msgstr ""
 msgid "Add-Ons – Product Options for WooCommerce requires WooCommerce to be active."
 msgstr ""
 
+#: src/Admin/InlineHelp.php:34
+msgid "More information"
+msgstr ""
+
 #: src/Admin/ProductData.php:40
-#: src/Admin/Settings.php:33
-#: src/Admin/Settings.php:34
+#: src/Admin/Settings.php:41
+#: src/Admin/Settings.php:42
 msgid "Add-Ons"
 msgstr ""
 
-#: src/Admin/Settings.php:76
+#: src/Admin/Settings.php:100
+msgid "These options control how product add-ons look and behave across your whole store. To choose which options appear on a specific product, edit that product and open the \"Add-Ons\" tab in the Product data box."
+msgstr ""
+
+#: src/Admin/Settings.php:110
 msgid "Enable add-ons"
 msgstr ""
 
-#: src/Admin/Settings.php:86
+#: src/Admin/Settings.php:111
+msgid "The master switch. When off, no add-on fields are shown on any product and no price changes are applied in the cart — even if products still have add-ons configured. Turn it on once you are ready to go live."
+msgstr ""
+
+#: src/Admin/Settings.php:122
 msgid "Show per-product add-on fields on the product page and apply price deltas in the cart."
 msgstr ""
 
-#: src/Admin/Settings.php:94
-msgid "Define each product's add-ons in the product editor, under the \"Add-Ons\" tab in the Product data panel."
+#: src/Admin/Settings.php:125
+msgid "Leave this on for normal operation. Switch it off to temporarily hide all add-ons without deleting any product settings."
 msgstr ""
 
-#: src/Service/AddOnsService.php:42
-msgid "Product options"
+#: src/Admin/Settings.php:131
+msgid "Group heading"
+msgstr ""
+
+#: src/Admin/Settings.php:132
+msgid "A short heading printed above the options on the product page, for example \"Personalise your order\" or \"Extras\". It helps customers understand that the fields are optional add-ons. Clear the field to show no heading at all."
+msgstr ""
+
+#: src/Admin/Settings.php:141
+msgid "e.g. Product options"
+msgstr ""
+
+#: src/Admin/Settings.php:144
+msgid "Heading shown above the fields on the product page. Leave empty to hide it."
+msgstr ""
+
+#: src/Admin/Settings.php:150
+#: src/Admin/Settings.php:156
+msgid "Display"
+msgstr ""
+
+#: src/Admin/Settings.php:151
+msgid "Presentation choices that change how the add-ons look on the storefront. They do not affect pricing or which options appear — only the visual treatment."
+msgstr ""
+
+#: src/Admin/Settings.php:166
+msgid "Show the price next to paid options."
+msgstr ""
+
+#: src/Admin/Settings.php:169
+msgid "Displays the extra cost in brackets, e.g. \"Gift wrap (+$5.00)\". Free options never show a price."
+msgstr ""
+
+#: src/Admin/Settings.php:180
+msgid "Mark required fields with an asterisk."
+msgstr ""
+
+#: src/Admin/Settings.php:183
+msgid "Adds a red * after the label of any option a customer must complete before adding to cart. Required options are still enforced even with this off."
+msgstr ""
+
+#: src/Admin/Settings.php:194
+msgid "Wrap the options in a bordered card."
+msgstr ""
+
+#: src/Admin/Settings.php:197
+msgid "Groups the options inside a subtle bordered box so they stand out from the rest of the product page. Turn off for a plain, inline layout that inherits your theme."
+msgstr ""
+
+#: src/Admin/Settings.php:206
+msgid "Define each product's add-ons in the product editor, under the \"Add-Ons\" tab in the Product data panel."
 msgstr ""
 
 #: src/Service/AddOnsService.php:43
 msgid "Please complete the \"{label}\" option before adding to cart."
 msgstr ""
 
-#: templates/add-on-fields.php:63
-#: templates/add-on-fields.php:85
+#: templates/add-on-fields.php:80
+#: templates/add-on-fields.php:102
 msgid "required"
 msgstr ""
 
-#: templates/add-on-fields.php:70
+#: templates/add-on-fields.php:87
 msgid "— Select —"
 msgstr ""
 
-#: templates/admin/product-data-panel.php:21
+#: templates/admin/product-data-panel.php:23
 msgid "Product add-ons"
 msgstr ""
 
-#: templates/admin/product-data-panel.php:23
+#: templates/admin/product-data-panel.php:24
+msgid "Each row below becomes one field a customer sees on this product page. Use Text for free-form input (like an engraving message), Checkbox for a yes/no extra, or Select for a list of choices. Any price you enter is added to the line total when the option is chosen."
+msgstr ""
+
+#: templates/admin/product-data-panel.php:27
 msgid "Define options customers can choose before adding this product to the cart. A positive price is added to the line total."
 msgstr ""
 
-#: templates/admin/product-data-panel.php:46
-#: templates/admin/product-data-panel.php:73
-msgid "Label"
+#: templates/admin/product-data-panel.php:33
+msgid "No add-ons yet"
 msgstr ""
 
-#: templates/admin/product-data-panel.php:48
-#: templates/admin/product-data-panel.php:75
-msgid "Text"
+#: templates/admin/product-data-panel.php:34
+msgid "Add your first option to let customers personalise this product or pay for extras such as gift wrapping, engraving, or express handling."
 msgstr ""
 
-#: templates/admin/product-data-panel.php:49
-#: templates/admin/product-data-panel.php:76
-msgid "Checkbox"
-msgstr ""
-
-#: templates/admin/product-data-panel.php:50
-#: templates/admin/product-data-panel.php:77
-msgid "Select"
-msgstr ""
-
-#: templates/admin/product-data-panel.php:52
-#: templates/admin/product-data-panel.php:79
-msgid "Price"
-msgstr ""
-
-#: templates/admin/product-data-panel.php:55
-#: templates/admin/product-data-panel.php:82
-msgid "Required"
+#: templates/admin/product-data-panel.php:56
+#: templates/admin/product-data-panel.php:97
+msgid "Option"
 msgstr ""
 
 #: templates/admin/product-data-panel.php:57
-#: templates/admin/product-data-panel.php:84
-msgid "Remove"
+#: templates/admin/product-data-panel.php:98
+msgid "Label (e.g. Gift wrap)"
+msgstr ""
+
+#: templates/admin/product-data-panel.php:57
+#: templates/admin/product-data-panel.php:98
+msgid "Option label"
+msgstr ""
+
+#: templates/admin/product-data-panel.php:58
+#: templates/admin/product-data-panel.php:99
+msgid "Option type"
+msgstr ""
+
+#: templates/admin/product-data-panel.php:59
+#: templates/admin/product-data-panel.php:100
+msgid "Text"
 msgstr ""
 
 #: templates/admin/product-data-panel.php:60
-#: templates/admin/product-data-panel.php:87
+#: templates/admin/product-data-panel.php:101
+msgid "Checkbox"
+msgstr ""
+
+#: templates/admin/product-data-panel.php:61
+#: templates/admin/product-data-panel.php:102
+msgid "Select"
+msgstr ""
+
+#: templates/admin/product-data-panel.php:63
+#: templates/admin/product-data-panel.php:104
+msgid "Price"
+msgstr ""
+
+#: templates/admin/product-data-panel.php:63
+#: templates/admin/product-data-panel.php:104
+msgid "Extra price added when chosen"
+msgstr ""
+
+#: templates/admin/product-data-panel.php:66
+#: templates/admin/product-data-panel.php:107
+msgid "Required"
+msgstr ""
+
+#: templates/admin/product-data-panel.php:68
+#: templates/admin/product-data-panel.php:109
+msgid "Remove"
+msgstr ""
+
+#: templates/admin/product-data-panel.php:71
+#: templates/admin/product-data-panel.php:112
 msgid "Select options, one per line: Label | price"
 msgstr ""
 
-#: templates/admin/product-data-panel.php:67
+#: templates/admin/product-data-panel.php:71
+#: templates/admin/product-data-panel.php:112
+msgid "Choices for the Select type"
+msgstr ""
+
+#: templates/admin/product-data-panel.php:72
+#: templates/admin/product-data-panel.php:113
+msgid "Only used for the \"Select\" type. One choice per line as \"Label | price\" — e.g. \"Standard | 0\" and \"Premium | 9.99\". Omit the price for a free choice."
+msgstr ""
+
+#: templates/admin/product-data-panel.php:91
 msgid "Add option"
 msgstr ""

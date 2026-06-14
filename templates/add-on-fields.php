@@ -24,8 +24,15 @@ if (! isset($add_ons) || ! is_array($add_ons) || $add_ons === []) {
 
 $addons_group_title = isset($group_title) ? (string) $group_title : '';
 $addons_prefix      = isset($field_prefix) ? (string) $field_prefix : 'addons_field_';
+
+$addons_settings      = isset($settings) && is_array($settings) ? $settings : array();
+$addons_show_prices   = (bool) ($addons_settings['show_prices'] ?? true);
+$addons_show_required = (bool) ($addons_settings['show_required'] ?? true);
+$addons_card_style    = (bool) ($addons_settings['card_style'] ?? true);
+
+$addons_wrap_class = 'addons-fields' . ($addons_card_style ? ' addons-fields--card' : '');
 ?>
-<div class="addons-fields">
+<div class="<?php echo esc_attr($addons_wrap_class); ?>">
     <?php if ($addons_group_title !== '') : ?>
         <p class="addons-fields__title"><?php echo esc_html($addons_group_title); ?></p>
     <?php endif; ?>
@@ -41,6 +48,16 @@ $addons_prefix      = isset($field_prefix) ? (string) $field_prefix : 'addons_fi
         $addons_options  = isset($addons_field['options']) && is_array($addons_field['options'])
             ? $addons_field['options']
             : array();
+
+        // Skip malformed definitions (no label) and selects with no choices —
+        // rendering them would produce empty, confusing controls.
+        if ($addons_label === '') {
+            continue;
+        }
+
+        if ($addons_type === 'select' && $addons_options === array()) {
+            continue;
+        }
         ?>
         <p class="addons-field addons-field--<?php echo esc_attr($addons_type); ?>">
             <?php if ($addons_type === 'checkbox') : ?>
@@ -53,14 +70,14 @@ $addons_prefix      = isset($field_prefix) ? (string) $field_prefix : 'addons_fi
                         <?php echo $addons_required ? 'required' : ''; ?>
                     />
                     <?php echo esc_html($addons_label); ?>
-                    <?php if ($addons_price > 0) : ?>
+                    <?php if ($addons_show_prices && $addons_price > 0) : ?>
                         <span class="addons-field__price">(<?php echo wp_kses_post(wc_price($addons_price)); ?>)</span>
                     <?php endif; ?>
                 </label>
             <?php elseif ($addons_type === 'select') : ?>
                 <label for="<?php echo esc_attr($addons_id); ?>">
                     <?php echo esc_html($addons_label); ?>
-                    <?php if ($addons_required) : ?><abbr class="required" title="<?php esc_attr_e('required', 'addons'); ?>">*</abbr><?php endif; ?>
+                    <?php if ($addons_required && $addons_show_required) : ?><abbr class="required" title="<?php esc_attr_e('required', 'addons'); ?>">*</abbr><?php endif; ?>
                 </label>
                 <select
                     id="<?php echo esc_attr($addons_id); ?>"
@@ -72,7 +89,7 @@ $addons_prefix      = isset($field_prefix) ? (string) $field_prefix : 'addons_fi
                         <?php
                         $addons_opt_label = (string) $addons_opt_label;
                         $addons_opt_price = (float) $addons_opt_price;
-                        $addons_opt_text  = $addons_opt_price > 0
+                        $addons_opt_text  = ($addons_show_prices && $addons_opt_price > 0)
                             ? $addons_opt_label . ' (' . wp_strip_all_tags(wc_price($addons_opt_price)) . ')'
                             : $addons_opt_label;
                         ?>
@@ -82,8 +99,8 @@ $addons_prefix      = isset($field_prefix) ? (string) $field_prefix : 'addons_fi
             <?php else : ?>
                 <label for="<?php echo esc_attr($addons_id); ?>">
                     <?php echo esc_html($addons_label); ?>
-                    <?php if ($addons_required) : ?><abbr class="required" title="<?php esc_attr_e('required', 'addons'); ?>">*</abbr><?php endif; ?>
-                    <?php if ($addons_price > 0) : ?>
+                    <?php if ($addons_required && $addons_show_required) : ?><abbr class="required" title="<?php esc_attr_e('required', 'addons'); ?>">*</abbr><?php endif; ?>
+                    <?php if ($addons_show_prices && $addons_price > 0) : ?>
                         <span class="addons-field__price">(<?php echo wp_kses_post(wc_price($addons_price)); ?>)</span>
                     <?php endif; ?>
                 </label>

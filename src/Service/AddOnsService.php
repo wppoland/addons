@@ -39,7 +39,7 @@ final class AddOnsService implements HasHooks
             fieldPrefix: 'addons_field_',
             fieldsTemplate: 'add-on-fields',
             labels: [
-                'group_title'    => __('Product options', 'addons'),
+                'group_title'    => $this->groupTitle(),
                 'required_error' => __('Please complete the "{label}" option before adding to cart.', 'addons'),
             ],
             isEnabled: fn (): bool => $this->isEnabled(),
@@ -65,11 +65,17 @@ final class AddOnsService implements HasHooks
     }
 
     /**
-     * Enqueue the lightweight front-end stylesheet on product pages only.
+     * Enqueue the lightweight front-end stylesheet wherever the add-on fields
+     * can render. The engine prints them on `woocommerce_before_add_to_cart_button`
+     * whenever a product form is shown, which includes the `[product_page]`
+     * shortcode on an arbitrary page — not just the single-product template. We
+     * therefore load on `is_product()` *or* when the current singular content
+     * embeds that shortcode, so the fields are never unstyled (avoids CLS) while
+     * staying off every other page (CWV / Plugin Check hygiene).
      */
     public function enqueueAssets(): void
     {
-        if (! function_exists('is_product') || ! is_product() || ! $this->isEnabled()) {
+        if (! $this->isEnabled() || ! $this->shouldEnqueueFront()) {
             return;
         }
 
@@ -84,6 +90,39 @@ final class AddOnsService implements HasHooks
     private function isEnabled(): bool
     {
         return (bool) ($this->settings()['enabled'] ?? false);
+    }
+
+    /**
+     * Whether the add-on stylesheet is needed on the current front-end request.
+     */
+    private function shouldEnqueueFront(): bool
+    {
+        if (function_exists('is_product') && is_product()) {
+            return true;
+        }
+
+        // `[product_page]` renders a full product form on an arbitrary page,
+        // where is_product() is false. Detect it on singular content only.
+        if (! is_singular()) {
+            return false;
+        }
+
+        $post = get_post();
+
+        if (! $post instanceof \WP_Post || $post->post_content === '') {
+            return false;
+        }
+
+        return has_shortcode($post->post_content, 'product_page');
+    }
+
+    /**
+     * Heading rendered above the add-on fields. An empty value intentionally
+     * hides the heading; the packaged default supplies the initial text.
+     */
+    private function groupTitle(): string
+    {
+        return trim((string) ($this->settings()['group_title'] ?? ''));
     }
 
     /**

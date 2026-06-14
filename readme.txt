@@ -5,7 +5,7 @@ Requires at least: 6.5
 Tested up to: 7.0
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 0.1.0
+Stable tag: 0.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,8 +21,11 @@ For each product you define a list of add-ons in the WooCommerce product editor.
 * **Price deltas** — give an add-on (or each select option) a price; the amount is added to the cart line total automatically.
 * **Free or paid** — leave the price at zero for free options such as a personalised message.
 * **Cart & order display** — the customer's choices appear in the cart, at checkout, and on the order.
+* **Display settings** — choose the group heading, show or hide option prices, toggle the required-field asterisk, and wrap the options in a bordered card — all from the Add-Ons settings page.
 
 Add-on definitions are stored as standard product meta — no custom database tables. The feature is powered by the WPPoland storefront-kit engine, so the plugin itself stays small and fast.
+
+Settings live under **WooCommerce → Add-Ons**. Removing the plugin cleans up its own options; your per-product definitions are kept as product meta so re-installing restores them.
 
 == Installation ==
 
@@ -49,6 +52,11 @@ No. Add-on definitions are stored as product meta.
 1. Add-Ons – Product Options for WooCommerce in action.
 
 == Changelog ==
+
+= 0.2.0 =
+* Add a customisable group heading shown above the add-on fields on the product page.
+* Add display settings: show/hide option prices, toggle the required-field asterisk, and an optional bordered card style.
+* Add an uninstall routine that removes the plugin's own options (product definitions are preserved as product meta).
 
 = 0.1.0 =
 * Initial release.

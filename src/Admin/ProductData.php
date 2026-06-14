@@ -85,6 +85,15 @@ final class ProductData implements HasHooks
             return;
         }
 
+        // Defence in depth: WooCommerce already gates the product save on
+        // edit_post, but verify the editor can manage this product before we
+        // mutate its meta (guards against the hook firing in an unexpected flow).
+        $productId = $product->get_id();
+
+        if ($productId > 0 && ! current_user_can('edit_post', $productId)) {
+            return;
+        }
+
         $definitions = $this->collectDefinitions();
 
         if ($definitions === []) {
@@ -137,7 +146,10 @@ final class ProductData implements HasHooks
                 'label'    => $label,
                 'type'     => $type,
                 'required' => ! empty($row['required']),
-                'price'    => isset($row['price']) ? (float) wc_format_decimal((string) $row['price']) : 0.0,
+                // Add-on deltas are *added* to the line price by the engine. A
+                // negative delta would let a buyer drive the line (and cart)
+                // total below the base price, so clamp to a non-negative surcharge.
+                'price'    => isset($row['price']) ? max(0.0, (float) wc_format_decimal((string) $row['price'])) : 0.0,
                 'options'  => [],
             ];
 
@@ -182,7 +194,8 @@ final class ProductData implements HasHooks
 
             $parts = explode('|', $line);
             $label = sanitize_text_field(trim($parts[0]));
-            $price = isset($parts[1]) ? (float) wc_format_decimal(trim($parts[1])) : 0.0;
+            // Clamp to a non-negative surcharge — see collectDefinitions().
+            $price = isset($parts[1]) ? max(0.0, (float) wc_format_decimal(trim($parts[1]))) : 0.0;
 
             if ($label !== '') {
                 $options[$label] = $price;
@@ -204,12 +217,22 @@ final class ProductData implements HasHooks
             return;
         }
 
+        wp_enqueue_style(
+            'addons-admin',
+            \Addons\Plugin::instance()->url('assets/css/admin.css'),
+            [],
+            \Addons\VERSION,
+        );
+
         wp_enqueue_script(
             'addons-admin',
             \Addons\Plugin::instance()->url('assets/js/admin.js'),
-            ['jquery'],
+            [],
             \Addons\VERSION,
-            true,
+            [
+                'in_footer' => true,
+                'strategy'  => 'defer',
+            ],
         );
     }
 }
